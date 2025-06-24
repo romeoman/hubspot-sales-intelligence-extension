@@ -1,0 +1,17 @@
+Subtask: Configure TypeScript and ESLint
+Parent Task: 1 (Initialize Monorepo Structure)
+
+Description: Set up TypeScript and ESLint configurations for all workspaces with consistent rules and shared configuration.
+
+Steps:
+- Create root tsconfig.json with base configuration
+- Create workspace-specific tsconfig.json files that extend the root
+- Set up path aliases for easier imports
+- Configure ESLint with appropriate plugins for React and Next.js
+- Create .eslintrc.js in root and workspace-specific overrides
+- Add lint scripts to package.json files
+- Configure TypeScript for proper workspace references
+
+Dependencies: 3 (Initialize HubSpot Extension Package), 4 (Initialize Vercel Backend Package), 5 (Initialize Shared Package)
+Status: pending
+Test Strategy: Run 'npm run lint' to verify ESLint works across all workspaces and check TypeScript compilation 

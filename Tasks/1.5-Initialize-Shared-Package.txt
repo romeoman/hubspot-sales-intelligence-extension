@@ -1,0 +1,17 @@
+Subtask: Initialize Shared Package
+Parent Task: 1 (Initialize Monorepo Structure)
+
+Description: Set up the shared workspace for code that will be used across both the HubSpot extension and Vercel backend.
+
+Steps:
+- Create package.json for shared workspace
+- Set up TypeScript configuration
+- Create folder structure for types, utilities, and constants
+- Add build scripts for compiling shared code
+- Configure package exports
+- Add README.md with documentation on shared code usage
+- Create initial shared types for Replit reports data
+
+Dependencies: 1 (Create Root Project Structure), 2 (Configure Turborepo)
+Status: pending
+Test Strategy: Verify shared package can be built and imported from other workspaces 

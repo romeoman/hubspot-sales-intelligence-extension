@@ -1,0 +1,18 @@
+{
+  "type": "crm-card",
+  "data": {
+    "title": "Replit Reports",
+    "location": "crm.record.tab",
+    "module": {
+      "file": "ReportViewer.jsx"
+    },
+    "objectTypes": [
+      {
+        "name": "contacts"
+      },
+      {
+        "name": "companies"
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+Task: Initialize Monorepo Structure
+Description: Set up the foundational monorepo structure with three main workspaces: hubspot-extension, vercel-backend, and shared libraries to enable code sharing and consistent development across the project.
+
+Subtasks:
+1. Create Root Project Structure
+   - Dependencies: None
+2. Configure Turborepo
+   - Dependencies: 1 (Create Root Project Structure)
+3. Initialize HubSpot Extension Package
+   - Dependencies: 1, 2
+4. Initialize Vercel Backend Package
+   - Dependencies: 1, 2
+5. Initialize Shared Package
+   - Dependencies: 1, 2
+6. Configure TypeScript and ESLint
+   - Dependencies: 3, 4, 5
+7. Set Up Testing Infrastructure
+   - Dependencies: 3, 4, 5, 6
+8. Configure CI/CD Workflow
+   - Dependencies: 2, 6, 7
+
+Each subtask is described in its own file (see Tasks/1.x-*.txt for details).
+
+---
+
+Dependencies: None
+Status: pending
+Priority: medium 

@@ -1,0 +1,20 @@
+{
+  "type": "crm-card",
+  "data": {
+    "title": "Sales Intelligence",
+    "description": "View AI-powered sales intelligence reports with outreach recommendations",
+    "uid": "sales-intelligence-card",
+    "location": "crm.record.tab",
+    "module": {
+      "file": "SalesIntelCard.jsx"
+    },
+    "objectTypes": [
+      {
+        "name": "contacts"
+      },
+      {
+        "name": "companies"
+      }
+    ]
+  }
+}

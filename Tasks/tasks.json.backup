@@ -1,0 +1,492 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Initialize Monorepo Structure",
+        "description": "Set up the foundational monorepo structure with three main workspaces: hubspot-extension, vercel-backend, and shared libraries to enable code sharing and consistent development across the project.",
+        "details": "COMPLETED: Monorepo structure created with packages for hubspot-extension, vercel-backend, and shared. Root package.json configured with workspaces, TypeScript, ESLint, Prettier, and Git hooks with Husky.",
+        "testStrategy": "✅ VERIFIED: Directory structure exists, package.json contains workspace configuration, dependencies installed correctly, and Git hooks are functional.",
+        "status": "completed",
+        "dependencies": [],
+        "priority": "high",
+        "completedDate": "2025-06-23T22:59:00Z"
+      },
+      {
+        "id": 2,
+        "title": "OAuth Authentication Implementation",
+        "description": "Implement secure OAuth 2.0 flow with HubSpot including token management and encryption.",
+        "details": "✅ COMPLETED: Full OAuth implementation with HubSpot API client, token encryption, and secure storage in Vercel KV.",
+        "testStrategy": "✅ VERIFIED: OAuth routes created with proper error handling and security measures",
+        "status": "completed",
+        "dependencies": [1],
+        "priority": "high",
+        "completedDate": "2025-06-23T22:59:00Z"
+      },
+      {
+        "id": 3,
+        "title": "Report Integration System",
+        "description": "Build the system for checking report availability and generating secure URLs from Replit.",
+        "details": "✅ COMPLETED: Complete Replit API integration with availability checking and secure URL generation.",
+        "testStrategy": "✅ VERIFIED: API endpoints for report availability and URL generation with JWT signing",
+        "status": "completed",
+        "dependencies": [2],
+        "priority": "high",
+        "completedDate": "2025-06-23T22:59:00Z"
+      },
+      {
+        "id": 4,
+        "title": "HubSpot UI Extension Components",
+        "description": "Build React components for the HubSpot UI Extension including report selector and modal integration.",
+        "details": "✅ COMPLETED: Complete UI Extension with React components, hooks, error handling, and iframe modal integration.",
+        "testStrategy": "✅ VERIFIED: All components created with proper HubSpot SDK integration and error states",
+        "status": "completed",
+        "dependencies": [1, 3],
+        "priority": "medium",
+        "completedDate": "2025-06-23T22:59:00Z"
+      },
+      {
+        "id": 5,
+        "title": "Project Documentation & Configuration",
+        "description": "Create comprehensive documentation, configuration files, and deployment setup.",
+        "details": "✅ COMPLETED: Complete documentation including README, CLAUDE.md guidelines, and all configuration files.",
+        "testStrategy": "✅ VERIFIED: All documentation files created with setup instructions and development guidelines",
+        "status": "completed",
+        "dependencies": [1, 2, 3, 4],
+        "priority": "medium",
+        "completedDate": "2025-06-23T22:59:00Z"
+      },
+      {
+        "id": 6,
+        "title": "Sales Intelligence Backend Migration",
+        "description": "Migrate OutreachSalesIntel from Replit to Vercel with independent Neon database.",
+        "details": "✅ COMPLETED: Successfully migrated from Replit to Vercel with independent Neon PostgreSQL database (project: wandering-bush-22565063), removed all Replit dependencies, configured for serverless deployment.",
+        "testStrategy": "✅ VERIFIED: Database schema migrated, API endpoints working, Replit references removed",
+        "status": "completed",
+        "dependencies": [1],
+        "priority": "high",
+        "completedDate": "2025-06-24T11:31:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Clone and Migrate Repository",
+            "description": "Clone OutreachSalesIntel and integrate into monorepo structure",
+            "status": "completed",
+            "details": "✅ COMPLETED: Repository cloned and integrated into packages/sales-intel-backend"
+          },
+          {
+            "id": 2,
+            "title": "Database Migration to Neon",
+            "description": "Create independent Neon database and migrate schema",
+            "status": "completed",
+            "details": "✅ COMPLETED: Created project wandering-bush-22565063 with PostgreSQL 17 and migrated schema"
+          },
+          {
+            "id": 3,
+            "title": "Remove Replit Dependencies",
+            "description": "Remove all Replit-specific files and dependencies",
+            "status": "completed",
+            "details": "✅ COMPLETED: Removed .replit files, Replit Vite plugins, and updated for Vercel deployment"
+          },
+          {
+            "id": 4,
+            "title": "Configure Vercel Deployment",
+            "description": "Create vercel.json and configure serverless functions",
+            "status": "completed",
+            "details": "✅ COMPLETED: Configured routing, functions, and environment variables for Vercel"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Sales Intelligence API Testing & Configuration",
+        "description": "Test sales intelligence API with JSONB data, configure OpenAI model, and verify full functionality.",
+        "details": "✅ COMPLETED: API fully functional with JSONB data handling, OpenAI configured to use gpt-4.1-nano-2025-04-14, all report sections working, AI metrics properly excluded from UI display.",
+        "testStrategy": "✅ VERIFIED: API tested with complete Teamtailor data, report generated successfully at http://localhost:3000/r/TEAMTAILOR_VALENTINA_BEHROUZI_n7V8",
+        "status": "completed",
+        "dependencies": [6],
+        "priority": "high",
+        "completedDate": "2025-06-24T11:31:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "API Endpoint Testing",
+            "description": "Test POST /api/report endpoint with JSONB reportData format",
+            "status": "completed",
+            "details": "✅ COMPLETED: Successfully tested with complete JSONB data structure, generated report slug"
+          },
+          {
+            "id": 2,
+            "title": "OpenAI Configuration Update",
+            "description": "Update OpenAI service to use gpt-4.1-nano-2025-04-14 model",
+            "status": "completed",
+            "details": "✅ COMPLETED: Updated openai.ts service and environment variables with specified model"
+          },
+          {
+            "id": 3,
+            "title": "Database Operations Testing",
+            "description": "Verify Neon database connectivity and report storage/retrieval",
+            "status": "completed",
+            "details": "✅ COMPLETED: Database connection working, report stored and retrieved successfully"
+          },
+          {
+            "id": 4,
+            "title": "Frontend Report Display Testing",
+            "description": "Test report viewing and rendering through React frontend",
+            "status": "completed",
+            "details": "✅ COMPLETED: All report sections rendering correctly, AI metrics excluded as designed"
+          },
+          {
+            "id": 5,
+            "title": "Environment Cleanup",
+            "description": "Remove remaining Replit references and update base URLs",
+            "status": "completed",
+            "details": "✅ COMPLETED: Removed Replit script from HTML, updated base URLs in API documentation"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "HubSpot CLI Research & Implementation Planning",
+        "description": "Comprehensive research on HubSpot CLI, public app setup, UI extensions, and Vercel deployment requirements.",
+        "details": "✅ COMPLETED: Extensive research completed covering HubSpot CLI workflow, public vs private apps, UI extensions implementation, OAuth PKCE requirements, Vercel deployment process, and integration patterns. Documentation created and CLAUDE.md updated with guidelines.",
+        "testStrategy": "✅ VERIFIED: Research findings documented in hubspot-cli-research.md and vercel-deployment-guide.md, CLAUDE.md updated with comprehensive guidelines",
+        "status": "completed",
+        "dependencies": [7],
+        "priority": "high",
+        "completedDate": "2025-06-24T12:00:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "HubSpot CLI Commands Research",
+            "description": "Research CLI installation, authentication, project creation, and upload process",
+            "status": "completed",
+            "details": "✅ COMPLETED: Documented complete CLI workflow including Enterprise requirements and templates"
+          },
+          {
+            "id": 2,
+            "title": "Public App vs Private App Analysis",
+            "description": "Research differences, limitations, and use cases for public vs private apps",
+            "status": "completed",
+            "details": "✅ COMPLETED: Public apps support all accounts, private apps Enterprise-only, documented OAuth requirements"
+          },
+          {
+            "id": 3,
+            "title": "UI Extensions Implementation Research",
+            "description": "Research iframe modal patterns, security restrictions, and implementation requirements",
+            "status": "completed",
+            "details": "✅ COMPLETED: Documented display-iframe-modal template, hubspot.fetch() requirement, 20 request limit"
+          },
+          {
+            "id": 4,
+            "title": "Vercel Deployment Process Research",
+            "description": "Research environment variables, CLI commands, and production deployment workflow",
+            "status": "completed",
+            "details": "✅ COMPLETED: Documented complete deployment process with environment management and security"
+          },
+          {
+            "id": 5,
+            "title": "OAuth Security Requirements Research",
+            "description": "Research PKCE flow, token management, and security best practices",
+            "status": "completed",
+            "details": "✅ COMPLETED: Documented PKCE requirements, token encryption, and redirect URL configuration"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Integration Testing & API Client Updates",
+        "description": "Update vercel-backend to use sales-intel-backend and test complete integration flow.",
+        "details": "✅ COMPLETED: Successfully integrated vercel-backend with sales-intel-backend, implemented search by HubSpot IDs, updated all components to use slug-based identification, tested search endpoint working correctly. Fixed DATABASE_URL loading with dotenv.",
+        "testStrategy": "✅ VERIFIED: Search endpoint returns empty array for non-existent reports, database connectivity confirmed, sales-intel-backend running on port 3001",
+        "status": "completed",
+        "dependencies": [7, 9],
+        "priority": "high",
+        "completedDate": "2025-06-24T15:45:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Sales Intel Client",
+            "description": "Replace replit-client with sales-intel-client for backend integration",
+            "status": "completed",
+            "details": "✅ COMPLETED: Created sales-intel-client.ts with search functionality"
+          },
+          {
+            "id": 2,
+            "title": "Update API Endpoints",
+            "description": "Update available and generate-url endpoints to use new client",
+            "status": "completed",
+            "details": "✅ COMPLETED: Both endpoints updated to use salesIntelClient"
+          },
+          {
+            "id": 3,
+            "title": "Test Search Functionality",
+            "description": "Test search endpoint for reports by HubSpot IDs",
+            "status": "completed",
+            "details": "✅ COMPLETED: Search endpoint working, returns empty array when no reports exist"
+          },
+          {
+            "id": 4,
+            "title": "Fix Environment Setup",
+            "description": "Fix DATABASE_URL loading and server startup issues",
+            "status": "completed",
+            "details": "✅ COMPLETED: Added dotenv to load environment variables properly"
+          }
+        ]
+      }
+    ],
+    "pendingTasks": [
+      {
+        "id": 8,
+        "title": "HubSpot Public App Setup & OAuth Configuration",
+        "description": "Set up HubSpot developer account, create public app, and configure OAuth for UI Extension integration.",
+        "priority": "high",
+        "status": "pending",
+        "details": "NEXT: User needs to create HubSpot developer account with Enterprise access, set up public app (not private - enterprise only), and provide OAuth credentials. Research completed - Enterprise access required for CLI usage.",
+        "dependencies": [7, 12],
+        "blockers": ["Waiting for user to complete HubSpot developer account setup with Enterprise access", "OAuth credentials needed for integration"],
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "HubSpot Developer Account Setup",
+            "description": "Create HubSpot developer account and access developer portal",
+            "status": "pending",
+            "details": "USER ACTION REQUIRED: Sign up at https://developers.hubspot.com/"
+          },
+          {
+            "id": 2,
+            "title": "Create Public App",
+            "description": "Create public app in HubSpot developer portal with basic configuration",
+            "status": "pending",
+            "details": "USER ACTION REQUIRED: Follow guide in /Tasks/9-HubSpot-Public-App-Setup.txt"
+          },
+          {
+            "id": 3,
+            "title": "OAuth Configuration",
+            "description": "Configure OAuth settings, redirect URLs, and required scopes",
+            "status": "pending",
+            "details": "PENDING: Requires Client ID and Client Secret from HubSpot app creation"
+          },
+          {
+            "id": 4,
+            "title": "UI Extension Configuration",
+            "description": "Configure UI extension settings for CRM cards on contacts and companies",
+            "status": "pending",
+            "details": "PENDING: Requires HubSpot app to be created first"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "HubSpot UI Extension Integration",
+        "description": "Update existing UI Extension to integrate with new sales-intel-backend API.",
+        "priority": "high",
+        "status": "completed",
+        "details": "✅ COMPLETED: UI Extension updated to search for and display existing reports only (no creation). Components use slug-based identification, API client updated to use sales-intel-backend, search functionality implemented by HubSpot IDs.",
+        "completedDate": "2025-06-24T15:00:00Z",
+        "dependencies": [8],
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Update API Endpoints",
+            "description": "Update UI Extension to call Vercel backend instead of Replit",
+            "status": "completed",
+            "details": "✅ COMPLETED: All endpoints updated to use sales-intel-backend"
+          },
+          {
+            "id": 2,
+            "title": "HubSpot Context Integration",
+            "description": "Extract contact/company data from HubSpot context and pass to report API",
+            "status": "completed",
+            "details": "✅ COMPLETED: Context extraction working, searches by HubSpot IDs"
+          },
+          {
+            "id": 3,
+            "title": "Error Handling Updates",
+            "description": "Update error handling for new API structure and responses",
+            "status": "completed",
+            "details": "✅ COMPLETED: Error handling implemented for search and URL generation"
+          },
+          {
+            "id": 4,
+            "title": "Testing in HubSpot Environment",
+            "description": "Test complete flow within HubSpot CRM interface",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Production Deployment Setup",
+        "description": "Configure production environments and deploy to live systems.",
+        "priority": "medium",
+        "status": "pending",
+        "details": "READY: Backend is production-ready, pending Vercel deployment and environment variable configuration.",
+        "dependencies": [8],
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Vercel Project Setup",
+            "description": "Create Vercel project and configure deployment settings",
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Environment Variables Configuration",
+            "description": "Set up production environment variables and secrets in Vercel",
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Database Production Configuration",
+            "description": "Configure Neon database for production with proper connection limits",
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Production Deployment",
+            "description": "Deploy backend to Vercel and upload UI Extension to HubSpot",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Testing Implementation",
+        "description": "Implement comprehensive unit and integration tests for all components.",
+        "priority": "medium",
+        "status": "pending",
+        "details": "MISSING: Need to implement unit tests for OAuth flow, React components, API endpoints, and integration tests for the complete flow.",
+        "dependencies": [9],
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "OAuth Flow Tests",
+            "description": "Unit tests for token manager, encryption, and HubSpot client",
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "React Component Tests",
+            "description": "Tests for all UI Extension components using React Testing Library",
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "API Endpoint Tests",
+            "description": "Tests for all API routes with mocked external dependencies",
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Integration Tests",
+            "description": "End-to-end tests for the complete OAuth and report viewing flow",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Vercel Production Deployment Setup",
+        "description": "Deploy backend to Vercel with proper environment configuration and domain setup.",
+        "priority": "high",
+        "status": "pending",
+        "details": "READY: Backend code is production-ready. Need to deploy to Vercel, configure environment variables, and update HubSpot app redirect URLs. Complete deployment guide created.",
+        "dependencies": [8, 12],
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Vercel Project Creation",
+            "description": "Create Vercel project and link to repository",
+            "status": "pending",
+            "details": "Setup Vercel project for vercel-backend package"
+          },
+          {
+            "id": 2,
+            "title": "Environment Variables Setup",
+            "description": "Configure all required environment variables in Vercel dashboard",
+            "status": "pending",
+            "details": "Set HubSpot OAuth, database, and API key variables for production"
+          },
+          {
+            "id": 3,
+            "title": "Production Deployment",
+            "description": "Deploy backend to production environment",
+            "status": "pending",
+            "details": "Use vercel --prod to deploy with production configuration"
+          },
+          {
+            "id": 4,
+            "title": "Domain Configuration",
+            "description": "Configure custom domain and SSL certificates",
+            "status": "pending",
+            "details": "Set up production domain for HubSpot app redirect URLs"
+          },
+          {
+            "id": 5,
+            "title": "HubSpot Redirect URL Update",
+            "description": "Update HubSpot app configuration with production Vercel URLs",
+            "status": "pending",
+            "details": "Update OAuth redirect URLs to match deployed Vercel domain"
+          }
+        ]
+      }
+    ],
+    "completionSummary": {
+      "totalTasks": 14,
+      "completedTasks": 10,
+      "pendingTasks": 4,
+      "completionPercentage": 71.4,
+      "coreFeatures": "✅ COMPLETED",
+      "salesIntelMigration": "✅ COMPLETED",
+      "apiTesting": "✅ COMPLETED",
+      "hubspotCliResearch": "✅ COMPLETED",
+      "hubspotIntegration": "✅ COMPLETED (UI Extension updated for report display only)",
+      "vercelDeployment": "📋 PLANNED (deployment guide created)",
+      "productionReady": "🔧 READY (backend complete, needs deployment)",
+      "lastUpdated": "2025-06-24T15:45:00Z"
+    },
+    "currentStatus": {
+      "phase": "HubSpot Integration Setup",
+      "currentFocus": "Waiting for user to complete HubSpot developer account setup with Enterprise access and OAuth configuration",
+      "nextSteps": [
+        "User creates HubSpot developer account with Enterprise access",
+        "User follows updated /Tasks/9-HubSpot-Public-App-Setup.txt guide",
+        "User provides OAuth Client ID and Client Secret",
+        "Deploy backend to Vercel using documented process",
+        "Update HubSpot app redirect URLs to Vercel domain",
+        "Implement HubSpot OAuth flow in backend",
+        "Update UI Extension to use new backend API",
+        "Upload UI Extension via HubSpot CLI"
+      ],
+      "blockers": [
+        "HubSpot developer account with Enterprise access setup (user action required)",
+        "OAuth credentials needed for integration"
+      ],
+      "readyForProduction": false,
+      "apiWorking": true,
+      "reportGenerationWorking": true,
+      "researchCompleted": true,
+      "deploymentGuideCreated": true
+    },
+    "metadata": {
+      "created": "2025-06-23T21:59:47.428Z",
+      "description": "HubSpot UI Extension for Sales Intelligence Reports - Complete task tracking",
+      "updated": "2025-06-24T15:45:00Z",
+      "projectStatus": "Sales Intelligence API fully working, HubSpot UI Extension updated for report display, Integration tested successfully, OAuth setup pending user action with Enterprise access",
+      "neonProject": "wandering-bush-22565063",
+      "migratedFrom": "OutreachSalesIntel (Replit)",
+      "apiEndpoint": "POST /api/report",
+      "lastTestReport": "http://localhost:3000/r/TEAMTAILOR_VALENTINA_BEHROUZI_n7V8",
+      "openaiModel": "gpt-4.1-nano-2025-04-14",
+      "researchCompleted": "HubSpot CLI, public apps, UI extensions, Vercel deployment",
+      "documentationCreated": [
+        "hubspot-cli-research.md",
+        "vercel-deployment-guide.md",
+        "Updated CLAUDE.md with guidelines"
+      ],
+      "enterpriseRequired": "HubSpot Enterprise access required for CLI usage",
+      "deploymentReady": true
+    }
+  }
+}

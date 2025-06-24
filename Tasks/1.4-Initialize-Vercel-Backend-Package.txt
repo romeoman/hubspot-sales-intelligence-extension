@@ -1,0 +1,17 @@
+Subtask: Initialize Vercel Backend Package
+Parent Task: 1 (Initialize Monorepo Structure)
+
+Description: Set up the Vercel backend workspace with Next.js and API route configuration.
+
+Steps:
+- Create package.json for vercel-backend workspace
+- Initialize Next.js project structure
+- Add necessary dependencies for API routes and serverless functions
+- Set up basic folder structure (pages, api, lib, etc.)
+- Create environment variable templates
+- Add scripts for development, building, and deployment
+- Create README.md with backend-specific instructions
+
+Dependencies: 1 (Create Root Project Structure), 2 (Configure Turborepo)
+Status: pending
+Test Strategy: Verify Next.js project initializes correctly with 'npm run dev' in the vercel-backend directory 

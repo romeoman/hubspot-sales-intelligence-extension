@@ -1,0 +1,7 @@
+ 🚀 Next Steps
+
+  1. Update environment variables in packages/vercel-backend/.env.example
+  2. Replace placeholder URLs in configuration files
+  3. Set up Vercel project and KV storage
+  4. Configure HubSpot OAuth app
+  5. Deploy and test the integration

@@ -1,0 +1,30 @@
+{
+  "name": "Sales Intelligence Reports",
+  "uid": "sales-intelligence-reports",
+  "description": "AI-powered sales intelligence reports with iframe modal display for contacts and companies.",
+  "allowedUrls": ["https://your-vercel-backend.vercel.app", "https://your-sales-intel.vercel.app"],
+  "auth": {
+    "redirectUrls": ["https://your-vercel-backend.vercel.app/api/auth/callback"],
+    "requiredScopes": ["crm.objects.contacts.read", "crm.objects.companies.read"],
+    "optionalScopes": [],
+    "conditionallyRequiredScopes": []
+  },
+  "support": {
+    "supportEmail": "support@mandigital.dev",
+    "documentationUrl": "https://github.com/your-repo/sales-intelligence",
+    "supportUrl": "https://mandigital.dev/support",
+    "supportPhone": "+1234567890"
+  },
+  "extensions": {
+    "crm": {
+      "cards": [
+        {
+          "file": "./extensions/sales-intel-card.json"
+        }
+      ]
+    }
+  },
+  "webhooks": {
+    "file": "./webhooks/webhooks.json"
+  }
+}

@@ -1,0 +1,17 @@
+Subtask: Set Up Testing Infrastructure
+Parent Task: 1 (Initialize Monorepo Structure)
+
+Description: Configure Jest or Vitest for testing across all workspaces with shared configuration.
+
+Steps:
+- Add testing dependencies to root package.json
+- Create Jest/Vitest configuration in root
+- Set up workspace-specific test configurations
+- Add test scripts to package.json files
+- Create example test files in each workspace
+- Configure test environment for React components
+- Set up test utilities in shared package
+
+Dependencies: 3 (Initialize HubSpot Extension Package), 4 (Initialize Vercel Backend Package), 5 (Initialize Shared Package), 6 (Configure TypeScript and ESLint)
+Status: pending
+Test Strategy: Run 'npm test' to verify tests run successfully across all workspaces 

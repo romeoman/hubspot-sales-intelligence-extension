@@ -1,0 +1,173 @@
+# HubSpot Public App Setup Guide
+
+## Overview
+Setting up a HubSpot public app for the sales intelligence UI extension with OAuth configuration.
+
+## Steps Required
+
+### 1. HubSpot Developer Account Setup
+- [ ] Access HubSpot Developer Portal: https://developers.hubspot.com/
+- [ ] Create/login to developer account
+- [ ] Navigate to "Apps" section
+
+### 2. Create Public App
+- [ ] Click "Create app" 
+- [ ] Choose "Public app" (not private app - enterprise only)
+- [ ] Fill app details:
+  - App name: "Sales Intelligence Reports"
+  - Description: "Transform sales intelligence data into shareable reports"
+  - App logo: Upload company logo
+  - Website URL: Your website
+  - Support email: Your support email
+
+### 3. Configure App Settings
+
+#### Basic Info
+- [ ] Set app name and description
+- [ ] Upload app icon (256x256px recommended)
+- [ ] Set privacy policy URL
+- [ ] Set terms of service URL
+
+#### Auth
+- [ ] Set redirect URLs:
+  - Local: `http://localhost:3000/auth/hubspot/callback`
+  - Production: `https://your-vercel-domain.vercel.app/auth/hubspot/callback`
+- [ ] Configure scopes needed:
+  - `crm.objects.contacts.read` - Read contact data
+  - `crm.objects.companies.read` - Read company data
+  - `crm.objects.deals.read` - Read deal data (if needed)
+  - `crm.schemas.contacts.read` - Read contact properties
+
+#### Features
+- [ ] Enable "UI Extensions"
+- [ ] Configure UI extension settings:
+  - Extension type: "CRM card"
+  - Object types: "Contacts", "Companies"
+  - Card title: "Sales Intelligence Report"
+
+### 4. OAuth Configuration Details Needed
+
+#### Client Credentials (will be provided by HubSpot)
+- [ ] Client ID (public)
+- [ ] Client Secret (keep secure)
+- [ ] Scopes granted
+
+#### Environment Variables to Set
+```bash
+# Add to .env file
+HUBSPOT_CLIENT_ID=your_client_id_here
+HUBSPOT_CLIENT_SECRET=your_client_secret_here
+HUBSPOT_REDIRECT_URI=https://your-domain.vercel.app/auth/hubspot/callback
+HUBSPOT_SCOPES=crm.objects.contacts.read,crm.objects.companies.read
+```
+
+### 5. UI Extension Configuration
+
+#### Extension Manifest
+Create `hubspot.config.yml` in root:
+```yaml
+name: sales-intelligence-reports
+version: 1.0.0
+extensions:
+  - type: crm-card
+    file: ./src/app/extensions/SalesIntelCard.jsx
+    associatedObjectTypes:
+      - CONTACT
+      - COMPANY
+```
+
+#### CRM Card Extension
+- [ ] Create extension component
+- [ ] Handle HubSpot context (contact/company ID)
+- [ ] Display report generation UI
+- [ ] Link to full report view
+
+### 6. HubSpot CLI Setup
+
+#### Install CLI
+```bash
+npm install -g @hubspot/cli
+```
+
+#### Authenticate
+```bash
+hs auth
+```
+
+#### Create Project
+```bash
+hs project create
+```
+
+#### Upload Extension
+```bash
+hs project upload
+```
+
+### 7. Testing
+
+#### Local Development
+- [ ] Test OAuth flow locally
+- [ ] Verify redirect URLs work
+- [ ] Test data retrieval from HubSpot API
+- [ ] Test UI extension in HubSpot sandbox
+
+#### Production Testing
+- [ ] Deploy to Vercel
+- [ ] Update redirect URLs in HubSpot app
+- [ ] Test full OAuth flow in production
+- [ ] Submit app for review (if going to marketplace)
+
+### 8. Integration with Current Backend
+
+#### Update API Routes
+- [ ] Add HubSpot OAuth endpoints:
+  - `/auth/hubspot` - Initiate OAuth
+  - `/auth/hubspot/callback` - Handle callback
+  - `/api/hubspot/contacts/:id` - Get contact data
+  - `/api/hubspot/companies/:id` - Get company data
+
+#### Update Report Generation
+- [ ] Modify report creation to accept HubSpot data
+- [ ] Add HubSpot contact/company ID to report metadata
+- [ ] Link reports back to HubSpot records
+
+#### Environment Configuration
+- [ ] Add HubSpot credentials to Vercel environment variables
+- [ ] Update CORS settings for HubSpot domains
+- [ ] Configure security headers
+
+## Required Information from User
+
+To complete the setup, please provide:
+
+1. **App Details:**
+   - Preferred app name
+   - App description
+   - Company logo (256x256px)
+   - Support email address
+   - Privacy policy URL
+   - Terms of service URL
+
+2. **Domain Information:**
+   - Production domain (Vercel URL)
+   - Any custom domains you plan to use
+
+3. **Scope Requirements:**
+   - Confirm which HubSpot data you need access to
+   - Any additional permissions required
+
+## Next Steps
+
+1. Create HubSpot developer account
+2. Set up public app with basic configuration
+3. Get Client ID and Client Secret
+4. Configure OAuth redirect URLs
+5. Provide credentials for environment setup
+
+## Resources
+
+- HubSpot Developer Portal: https://developers.hubspot.com/
+- Public App Quickstart: https://developers.hubspot.com/docs/guides/crm/public-apps/quickstart
+- UI Extensions Guide: https://developers.hubspot.com/docs/guides/crm/ui-extensions
+- HubSpot CLI Documentation: https://developers.hubspot.com/docs/guides/tools/cli

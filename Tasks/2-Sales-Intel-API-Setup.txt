@@ -1,0 +1,169 @@
+# Task 2: Sales Intelligence API Setup
+
+## Overview
+Set up and test the migrated Sales Intelligence API backend that generates comprehensive sales reports with AI-powered insights.
+
+## Status: ✅ MIGRATION COMPLETE - TESTING PENDING
+
+## Completed Sub-tasks
+
+### 2.1 Repository Migration ✅
+- Cloned OutreachSalesIntel from GitHub using MCP tools
+- Integrated into packages/sales-intel-backend directory
+- Preserved all React components and API functionality
+
+### 2.2 Database Migration ✅ 
+- Created independent Neon PostgreSQL project: wandering-bush-22565063
+- Migrated database schema (users, schemas, reports tables)
+- Configured Drizzle ORM for Neon serverless connection
+- Updated database connection configuration
+
+### 2.3 Replit Dependency Removal ✅
+- Removed .replit configuration files
+- Removed Replit Vite plugins from package.json
+- Updated vite.config.ts to remove Replit-specific code
+- Cleaned up all Replit references
+
+### 2.4 Vercel Configuration ✅
+- Created vercel.json with proper routing configuration
+- Updated package.json for monorepo structure
+- Configured serverless functions with 30s timeout
+- Set up environment variable placeholders
+
+## Pending Sub-tasks
+
+### 2.5 Local Development Testing ⏳
+- Install dependencies: `cd packages/sales-intel-backend && npm install`
+- Set up .env file with Neon connection string
+- Test local server: `npm run dev`
+- Verify database connectivity
+
+### 2.6 API Endpoint Testing ⏳
+- Test POST /api/report with JSONB data (reportData field)
+- Test POST /api/report with schema validation (payload field)
+- Test GET /api/report/:slug for data retrieval
+- Test GET /r/:slug for frontend report display
+- Verify health check endpoint: GET /api/health
+
+### 2.7 Report Generation Testing ⏳
+- Test with sample sales intelligence data
+- Verify AI processing (OpenAI integration)
+- Test report URL generation and slug creation
+- Verify HubSpot integration fields storage
+
+## API Endpoints Available
+
+### Core Endpoints
+- **POST /api/report** - Create sales intelligence report
+- **GET /api/report/:slug** - Retrieve report data (JSON)
+- **GET /r/:slug** - View report dashboard (HTML)
+- **GET /api/health** - Health check
+- **GET /api/schemas** - List available schemas
+- **GET /api/schemas/sales-intel-v1** - Get schema definition
+
+### Request Formats
+
+#### JSONB Mode (Flexible)
+```json
+{
+  "schemaKey": "sales-intel-v1",
+  "hubspotRecordId": "123456789",
+  "hubspotCompanyId": "987654321",
+  "hubspotContactId": "456789123",
+  "reportData": {
+    "sequence_start_date": "2024-03-16",
+    "basic_information": {
+      "first_name": "John",
+      "last_name": "Doe",
+      "title": "CMO",
+      "company_name": "TechCorp"
+    }
+  }
+}
+```
+
+#### Schema Validation Mode (Strict)
+```json
+{
+  "schemaKey": "sales-intel-v1", 
+  "payload": {
+    // Must match exact schema requirements
+  }
+}
+```
+
+## Environment Variables Needed
+
+```env
+DATABASE_URL=postgresql://neondb_owner:npg_ZBnhG6EeK7pW@ep-yellow-violet-a81qh1e5-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
+OPENAI_API_KEY=your_openai_api_key_here
+NODE_ENV=development
+PORT=3000
+```
+
+## Database Schema
+
+### Tables Created
+- **users**: User management (id, username, password)
+- **schemas**: Schema registry (id, key, name, version, schema, isActive)
+- **reports**: Report storage (id, slug, schemaKey, hubspotRecordId, hubspotCompanyId, hubspotContactId, originalPayload, payload, processedPayload)
+
+### Key Features
+- JSONB support for flexible data storage
+- HubSpot integration fields for CRM connectivity
+- AI-processed payload storage
+- Unique slug generation for shareable URLs
+
+## Testing Commands
+
+```bash
+# Install dependencies
+cd packages/sales-intel-backend
+npm install
+
+# Start development server
+npm run dev
+
+# Test health endpoint
+curl http://localhost:3000/api/health
+
+# Test report creation (JSONB mode)
+curl -X POST http://localhost:3000/api/report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "schemaKey": "sales-intel-v1",
+    "reportData": {
+      "sequence_start_date": "2024-06-24",
+      "basic_information": {
+        "first_name": "Test",
+        "last_name": "User", 
+        "company_name": "TestCorp"
+      }
+    }
+  }'
+```
+
+## Integration Points
+
+### With HubSpot UI Extension
+- UI Extension will call POST /api/report with contact/company data
+- Generated report URL will be displayed in iframe modal
+- HubSpot context (contactId, companyId) passed as integration fields
+
+### With Neon Database
+- All report data stored in PostgreSQL with JSONB support
+- Drizzle ORM handles schema management and migrations
+- Connection pooling optimized for serverless environment
+
+## Next Steps
+1. Complete local development testing
+2. Verify all API endpoints function correctly
+3. Test with realistic sales intelligence data
+4. Update HubSpot UI Extension to integrate with new backend
+5. Deploy to Vercel production environment
+
+## Files Modified/Created
+- packages/sales-intel-backend/* (entire migrated codebase)
+- packages/sales-intel-backend/vercel.json (new)
+- packages/sales-intel-backend/.env (new)
+- packages/sales-intel-backend/.env.example (new)

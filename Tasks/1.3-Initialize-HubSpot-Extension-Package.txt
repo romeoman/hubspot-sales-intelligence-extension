@@ -1,0 +1,17 @@
+Subtask: Initialize HubSpot Extension Package
+Parent Task: 1 (Initialize Monorepo Structure)
+
+Description: Set up the HubSpot extension workspace with necessary configuration and dependencies.
+
+Steps:
+- Create package.json for hubspot-extension workspace
+- Add HubSpot CLI and UI Extension dependencies
+- Set up basic folder structure (src, public, etc.)
+- Create initial hsextension.json configuration file
+- Add scripts for development, building, and deploying
+- Initialize basic React component structure
+- Create README.md with extension-specific instructions
+
+Dependencies: 1 (Create Root Project Structure), 2 (Configure Turborepo)
+Status: pending
+Test Strategy: Verify package.json contains correct dependencies and scripts for HubSpot extension development 

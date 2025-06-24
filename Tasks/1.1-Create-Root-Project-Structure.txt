@@ -1,0 +1,16 @@
+Subtask: Create Root Project Structure
+Parent Task: 1 (Initialize Monorepo Structure)
+
+Description: Initialize the root directory with git, create the basic folder structure, and set up the root package.json with workspaces configuration.
+
+Steps:
+- Create the root project directory 'hubspot-replit-integration'
+- Initialize git repository
+- Create the packages directory with subdirectories for hubspot-extension, vercel-backend, and shared
+- Create the root package.json with workspaces configuration pointing to packages/*
+- Add initial dependencies including turbo
+- Create .gitignore, .npmrc, and README.md files with appropriate content
+
+Dependencies: None
+Status: pending
+Test Strategy: Verify directory structure exists and package.json contains correct workspace configuration 

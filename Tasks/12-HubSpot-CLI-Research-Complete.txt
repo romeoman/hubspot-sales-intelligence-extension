@@ -1,0 +1,142 @@
+# HubSpot CLI Research Complete
+
+## Task Status: ✅ COMPLETED
+
+### Research Scope
+Comprehensive research on HubSpot CLI, public app development, UI extensions, and integration requirements for the Sales Intelligence project.
+
+## Key Findings
+
+### HubSpot CLI Requirements
+- **CLI Version**: Must use `@hubspot/cli@latest` for UI extensions support
+- **Account Requirements**: HubSpot Enterprise access required for CLI usage (Sales or Service Hub Enterprise)
+- **Authentication**: Personal access key required for CLI authentication
+- **Project Creation**: Template-based project creation with `getting-started-public-app` and `display-iframe-modal`
+
+### Public App vs Private App
+- **Public Apps**: 
+  - Available to all HubSpot accounts via App Marketplace
+  - Can be installed by multiple accounts
+  - Requires full OAuth flow with PKCE
+  - Limited to 20 concurrent requests per installed account
+  - Best for broader market reach
+
+- **Private Apps**:
+  - Enterprise-only, single account installation
+  - Simpler token-based authentication
+  - Cannot be distributed via marketplace
+  - No concurrent request limitations
+  - Best for internal Enterprise tools
+
+### UI Extensions Implementation
+- **Template**: `display-iframe-modal` provides iframe integration pattern
+- **Security**: Must use `hubspot.fetch()` for all API calls (no direct external calls)
+- **Object Support**: Can target CONTACT and COMPANY objects
+- **Location**: CRM record pages with custom card integration
+- **Limitations**: 20 concurrent requests per account limit applies
+
+### OAuth Security Requirements
+- **PKCE Flow**: Proof Key for Code Exchange required for enhanced security
+- **Client Secrets**: Must remain server-side only (never in frontend)
+- **Token Storage**: Encrypt tokens before storing in Vercel KV
+- **Redirect URLs**: Must match exactly between HubSpot app and deployment
+- **Token Refresh**: Implement refresh 5 minutes before expiry
+
+### Vercel Deployment Process
+- **Environment Variables**: Use `vercel env pull` for local sync
+- **Production Deployment**: `vercel --prod` for production deployment
+- **Domain Configuration**: Custom domains require SSL certificate setup
+- **CORS**: Configure for HubSpot domains (app.hubspot.com)
+- **Monitoring**: Built-in function logs and error tracking
+
+## Documentation Created
+
+### 1. hubspot-cli-research.md
+Complete guide covering:
+- CLI installation and setup
+- Project creation with templates
+- UI extensions implementation
+- OAuth configuration
+- Security best practices
+- Testing and debugging
+
+### 2. vercel-deployment-guide.md
+Comprehensive deployment guide covering:
+- Environment variable management
+- Production deployment process
+- Database configuration
+- Security headers and CORS
+- Monitoring and troubleshooting
+
+### 3. Updated CLAUDE.md
+Added new sections:
+- HubSpot CLI Development Workflow
+- Public App vs Private App Guidelines
+- Vercel Deployment Workflow
+- UI Extensions Implementation Guidelines
+- OAuth Flow Implementation Requirements
+- Environment Variable Management
+
+## Critical Requirements Identified
+
+### For User Action
+1. **Enterprise Access**: User must have HubSpot Enterprise access for CLI usage
+2. **Developer Account**: Must create account at https://developers.hubspot.com/
+3. **Public App Creation**: Follow setup guide with proper OAuth configuration
+4. **OAuth Credentials**: Provide Client ID and Client Secret for integration
+
+### For Implementation
+1. **PKCE OAuth Flow**: Enhanced security required for public apps
+2. **hubspot.fetch()**: Only allowed method for API calls from UI extension
+3. **Token Encryption**: Mandatory before storing in Vercel KV
+4. **Redirect URL Matching**: Must match exactly between app and deployment
+
+## Next Steps
+
+### Immediate (User Action Required)
+1. Create HubSpot developer account with Enterprise access
+2. Follow updated setup guide in `/Tasks/9-HubSpot-Public-App-Setup.txt`
+3. Create public app with OAuth configuration
+4. Provide Client ID and Client Secret
+
+### Development (Ready to Execute)
+1. Deploy backend to Vercel using documented process
+2. Configure environment variables for production
+3. Update HubSpot app redirect URLs to Vercel domain
+4. Implement OAuth flow in backend
+5. Upload UI extension via CLI
+
+## Blockers Resolved
+- ✅ CLI workflow and requirements documented
+- ✅ Public vs private app decision clarified (public app chosen)
+- ✅ UI extension implementation pattern identified
+- ✅ Security requirements fully specified
+- ✅ Deployment process documented
+
+## Remaining Blockers
+- ⏳ User needs Enterprise access for HubSpot CLI
+- ⏳ OAuth credentials needed from user's public app setup
+
+## Impact on Project Timeline
+- **Positive**: Clear roadmap and requirements identified
+- **Consideration**: Enterprise access requirement may affect user's timeline
+- **Mitigation**: Complete setup guide provided for efficient execution
+
+## Resources Created
+- Complete CLI workflow documentation
+- Step-by-step deployment guide
+- Updated project guidelines in CLAUDE.md
+- Task tracking with dependencies and blockers
+
+## Completion Date
+June 24, 2025 - 12:00 UTC
+
+## Dependencies Satisfied
+- Task #7: Sales Intelligence API Testing & Configuration ✅
+- Backend migration and API functionality verified ✅
+- Database operations working with Neon ✅
+
+## Enables Next Tasks
+- Task #8: HubSpot Public App Setup (user action)
+- Task #13: Vercel Production Deployment (implementation ready)
+- Task #9: HubSpot UI Extension Integration (pending OAuth)
