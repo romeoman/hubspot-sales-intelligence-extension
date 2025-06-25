@@ -111,7 +111,7 @@ const createResponse = await fetch('/api/report', {
 
 #### Production API Endpoints (Database-Integrated)
 
-**Latest Deployment:** `https://sales-intel-backend-os8u4ga9i-man-digital.vercel.app`
+**Production Domain:** `https://mandigital.dev`
 
 **Key Endpoints:**
 
