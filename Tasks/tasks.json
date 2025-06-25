@@ -233,6 +233,88 @@
             "details": "✅ COMPLETED: Added dotenv to load environment variables properly"
           }
         ]
+      },
+      {
+        "id": 15,
+        "title": "Database Schema Optimization & JSONB Implementation",
+        "description": "Implement JSONB storage with indexed HubSpot IDs for optimal query performance in UI extensions.",
+        "details": "✅ COMPLETED: Database schema optimized with JSONB payload storage and indexed columns for hubspot_company_id, hubspot_contact_id, and slug. Created new API endpoints for HubSpot ID-based queries. All endpoints now integrate with Neon PostgreSQL database.",
+        "testStrategy": "✅ VERIFIED: Database queries by HubSpot IDs working, JSONB data retrieval confirmed, production API endpoints tested successfully",
+        "status": "completed",
+        "dependencies": [7],
+        "priority": "high",
+        "completedDate": "2025-06-24T23:50:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Add Database Indexes for HubSpot IDs",
+            "description": "Create optimized indexes on hubspot_company_id and hubspot_contact_id columns",
+            "status": "completed",
+            "details": "✅ COMPLETED: Added conditional indexes for fast HubSpot ID queries"
+          },
+          {
+            "id": 2,
+            "title": "Create HubSpot ID Query Endpoint",
+            "description": "Build /api/reports/by-hubspot-id endpoint for UI extension integration",
+            "status": "completed",
+            "details": "✅ COMPLETED: Endpoint supports contactId and companyId query parameters with optimized database lookups"
+          },
+          {
+            "id": 3,
+            "title": "Update Existing API for Database Integration",
+            "description": "Convert existing /api/report/[slug] endpoint from hardcoded data to database queries",
+            "status": "completed",
+            "details": "✅ COMPLETED: All endpoints now read from Neon PostgreSQL with proper error handling"
+          },
+          {
+            "id": 4,
+            "title": "Create Report Creation Endpoint",
+            "description": "Build /api/reports/create endpoint with JSONB validation and slug generation",
+            "status": "completed",
+            "details": "✅ COMPLETED: POST endpoint with automatic slug generation and HubSpot ID extraction"
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Production CSS Styling Fixes",
+        "description": "Fix dark/light theme inconsistencies across homepage and API documentation pages to match report template styling.",
+        "details": "✅ COMPLETED: Updated CSS to use consistent light theme (bg-gray-50 backgrounds, white cards, dark text). Fixed homepage and API docs styling to match report template design. Deployed to production.",
+        "testStrategy": "✅ VERIFIED: Homepage and API docs now use consistent light theme, deployed at https://sales-intel-backend-77eralx0z-man-digital.vercel.app",
+        "status": "completed",
+        "dependencies": [15],
+        "priority": "high",
+        "completedDate": "2025-06-24T23:55:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Fix CSS Variables for Light Theme",
+            "description": "Update :root CSS variables to use light theme as default instead of dark",
+            "status": "completed",
+            "details": "✅ COMPLETED: Changed CSS variables to light theme (bg-gray-50, white cards, dark text)"
+          },
+          {
+            "id": 2,
+            "title": "Update Homepage Styling",
+            "description": "Fix homepage to use consistent light theme colors",
+            "status": "completed",
+            "details": "✅ COMPLETED: Updated homepage background and text colors to match report template"
+          },
+          {
+            "id": 3,
+            "title": "Update API Documentation Styling",
+            "description": "Fix API docs component to use light theme",
+            "status": "completed",
+            "details": "✅ COMPLETED: Updated API documentation headings and backgrounds"
+          },
+          {
+            "id": 4,
+            "title": "Deploy and Test Styling",
+            "description": "Build, deploy, and verify styling fixes in production",
+            "status": "completed",
+            "details": "✅ COMPLETED: Deployed to https://sales-intel-backend-77eralx0z-man-digital.vercel.app"
+          }
+        ]
       }
     ],
     "pendingTasks": [
@@ -244,7 +326,10 @@
         "status": "pending",
         "details": "✅ UPDATED: User created HubSpot developer account and installed CLI (v7.4.8). Enterprise access NOT required for CLI. Next: Complete authentication, create public app, and provide OAuth credentials.",
         "dependencies": [7, 12],
-        "blockers": ["Complete CLI authentication with Personal Access Key", "Create public app and get OAuth credentials"],
+        "blockers": [
+          "Complete CLI authentication with Personal Access Key",
+          "Create public app and get OAuth credentials"
+        ],
         "subtasks": [
           {
             "id": 1,
@@ -433,60 +518,73 @@
       }
     ],
     "completionSummary": {
-      "totalTasks": 14,
-      "completedTasks": 10,
+      "totalTasks": 16,
+      "completedTasks": 12,
       "pendingTasks": 4,
-      "completionPercentage": 71.4,
+      "completionPercentage": 75.0,
       "coreFeatures": "✅ COMPLETED",
       "salesIntelMigration": "✅ COMPLETED",
       "apiTesting": "✅ COMPLETED",
       "hubspotCliResearch": "✅ COMPLETED",
       "hubspotIntegration": "✅ COMPLETED (UI Extension updated for report display only)",
-      "vercelDeployment": "📋 PLANNED (deployment guide created)",
-      "productionReady": "🔧 READY (backend complete, needs deployment)",
-      "lastUpdated": "2025-06-24T15:45:00Z"
+      "databaseIntegration": "✅ COMPLETED (JSONB with indexed HubSpot IDs)",
+      "cssStylingFixes": "✅ COMPLETED (consistent light theme deployed)",
+      "vercelDeployment": "✅ COMPLETED (production deployment with database integration)",
+      "productionReady": "✅ READY (backend deployed and tested)",
+      "lastUpdated": "2025-06-24T23:55:00Z"
     },
     "currentStatus": {
-      "phase": "HubSpot Integration Setup",
-      "currentFocus": "Waiting for user to complete HubSpot developer account setup with Enterprise access and OAuth configuration",
+      "phase": "Production Ready - HubSpot OAuth Setup",
+      "currentFocus": "Production backend deployed with database integration. Ready for HubSpot OAuth setup and UI extension integration.",
       "nextSteps": [
-        "User creates HubSpot developer account with Enterprise access",
+        "User creates HubSpot developer account (Enterprise access NOT required)",
         "User follows updated /Tasks/9-HubSpot-Public-App-Setup.txt guide",
-        "User provides OAuth Client ID and Client Secret",
-        "Deploy backend to Vercel using documented process",
-        "Update HubSpot app redirect URLs to Vercel domain",
-        "Implement HubSpot OAuth flow in backend",
-        "Update UI Extension to use new backend API",
-        "Upload UI Extension via HubSpot CLI"
+        "User provides OAuth Client ID and Client Secret for production integration",
+        "Update HubSpot app redirect URLs to use production Vercel domain",
+        "Test complete HubSpot UI extension flow with production backend",
+        "Upload UI Extension via HubSpot CLI for marketplace deployment"
       ],
       "blockers": [
-        "HubSpot developer account with Enterprise access setup (user action required)",
-        "OAuth credentials needed for integration"
+        "HubSpot developer account setup (user action required)",
+        "OAuth credentials needed for production integration"
       ],
-      "readyForProduction": false,
+      "readyForProduction": true,
       "apiWorking": true,
       "reportGenerationWorking": true,
+      "databaseIntegrated": true,
+      "productionDeployed": true,
+      "stylingFixed": true,
       "researchCompleted": true,
       "deploymentGuideCreated": true
     },
     "metadata": {
       "created": "2025-06-23T21:59:47.428Z",
       "description": "HubSpot UI Extension for Sales Intelligence Reports - Complete task tracking",
-      "updated": "2025-06-24T15:45:00Z",
-      "projectStatus": "Sales Intelligence API fully working, HubSpot UI Extension updated for report display, Integration tested successfully, OAuth setup pending user action with Enterprise access",
+      "updated": "2025-06-24T23:55:00Z",
+      "projectStatus": "Production ready: Database integrated, styling fixed, API deployed with JSONB support. Ready for HubSpot OAuth setup and UI extension integration.",
       "neonProject": "wandering-bush-22565063",
       "migratedFrom": "OutreachSalesIntel (Replit)",
-      "apiEndpoint": "POST /api/report",
-      "lastTestReport": "http://localhost:3000/r/TEAMTAILOR_VALENTINA_BEHROUZI_n7V8",
+      "productionUrl": "https://sales-intel-backend-77eralx0z-man-digital.vercel.app",
+      "apiEndpoints": [
+        "GET /api/report/{slug}",
+        "GET /api/reports/by-hubspot-id?contactId=X&companyId=Y",
+        "POST /api/reports/create",
+        "GET /r/{slug}"
+      ],
+      "lastTestReport": "https://sales-intel-backend-77eralx0z-man-digital.vercel.app/r/TEAMTAILOR_VALENTINA_BEHROUZI_cqFb",
       "openaiModel": "gpt-4.1-nano-2025-04-14",
-      "researchCompleted": "HubSpot CLI, public apps, UI extensions, Vercel deployment",
+      "databaseSchema": "JSONB payload with indexed HubSpot IDs (company_id, contact_id, slug)",
+      "researchCompleted": "HubSpot CLI, public apps, UI extensions, Vercel deployment, database optimization",
       "documentationCreated": [
         "hubspot-cli-research.md",
         "vercel-deployment-guide.md",
-        "Updated CLAUDE.md with guidelines"
+        "Updated CLAUDE.md with database patterns",
+        "API_DOCUMENTATION_JSONB.md"
       ],
-      "enterpriseRequired": "HubSpot Enterprise access required for CLI usage",
-      "deploymentReady": true
+      "enterpriseRequired": false,
+      "deploymentReady": true,
+      "productionDeployed": true,
+      "stylingConsistent": true
     }
   }
 }

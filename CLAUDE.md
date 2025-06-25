@@ -50,6 +50,56 @@ This is a HubSpot UI Extension for integrating Sales Intelligence reports via Ve
 - Respect HubSpot's iframe security restrictions
 - Test across different portal sizes and user permissions
 
+#### HubSpot UI Extension Query Patterns
+
+**Query Reports by HubSpot IDs:**
+
+```typescript
+// In HubSpot UI Extension - get context
+const context = hubspot.getContext();
+const contactId = context.crm.objectId;
+const companyId = context.crm.associations?.company?.[0]?.id;
+
+// Query existing reports (optimized with indexed columns)
+const response = await fetch(
+  `/api/reports/by-hubspot-id?contactId=${contactId}&companyId=${companyId}`
+);
+const { data } = await response.json();
+
+if (data.reports.length > 0) {
+  // Display existing reports
+  const reportUrl = data.reports[0].reportUrl;
+  hubspot.iframe.setUrl(reportUrl);
+} else {
+  // Show "no reports" message or create new report flow
+}
+```
+
+**Create New Reports:**
+
+```typescript
+// Create new report with HubSpot context
+const reportData = {
+  schemaKey: 'sales-intel-v1',
+  hubspotContactId: contactId,
+  hubspotCompanyId: companyId,
+  reportData: {
+    basic_information: {
+      first_name: contact.properties.firstname,
+      last_name: contact.properties.lastname,
+      company_name: company.properties.name,
+      // ... JSONB structure
+    },
+  },
+};
+
+const createResponse = await fetch('/api/reports/create', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(reportData),
+});
+```
+
 ### API Development Standards
 
 - **ALWAYS** validate all input parameters using shared validation utilities
@@ -58,6 +108,24 @@ This is a HubSpot UI Extension for integrating Sales Intelligence reports via Ve
 - Include request IDs for tracing and debugging
 - Implement rate limiting on all public endpoints
 - Return appropriate HTTP status codes
+
+#### Production API Endpoints (Database-Integrated)
+
+**Latest Deployment:** `https://sales-intel-backend-77eralx0z-man-digital.vercel.app`
+
+**Key Endpoints:**
+
+- `GET /api/report/{slug}` - Get single report by slug (database lookup)
+- `GET /api/reports/by-hubspot-id?contactId=X&companyId=Y` - Query reports by HubSpot IDs (indexed)
+- `POST /api/reports/create` - Create new report with JSONB structure
+- `GET /r/{slug}` - View HTML report (React + Tailwind CSS)
+
+**Database Integration:**
+
+- All endpoints now read/write from Neon PostgreSQL (wandering-bush-22565063)
+- JSONB payload stored with indexed HubSpot IDs for fast queries
+- Connection string configured via environment variables
+- Optimized for HubSpot UI extension performance
 
 ### Code Organization
 
@@ -77,6 +145,37 @@ packages/
 - **Store all database decisions** in Memory MCP with migration history
 - **Query Context7/Atlas Docs** for Drizzle ORM best practices before schema changes
 - **Use proper connection pooling** for Vercel serverless functions
+
+#### JSONB Report Schema Design
+
+- **PRIMARY STORAGE**: Use JSONB column for flexible report data structures
+- **INDEXED COLUMNS**: Extract key identifiers (slug, hubspot_company_id, hubspot_contact_id) to separate columns with indexes
+- **QUERY EFFICIENCY**: Optimize for HubSpot UI extension queries by contact/company ID
+- **SCHEMA VERSIONING**: Support multiple report formats through schema_key field
+
+#### Database Schema (Neon Project: wandering-bush-22565063)
+
+```sql
+-- Reports table with JSONB + indexed columns approach
+CREATE TABLE reports (
+  id SERIAL PRIMARY KEY,
+  slug VARCHAR(255) UNIQUE NOT NULL,
+  schema_key VARCHAR(100) NOT NULL,
+  hubspot_record_id VARCHAR(100),
+  hubspot_company_id VARCHAR(100),
+  hubspot_contact_id VARCHAR(100),
+  original_payload JSONB,
+  payload JSONB NOT NULL,
+  processed_payload JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Optimized indexes for HubSpot UI extension queries
+CREATE INDEX idx_reports_hubspot_company_id ON reports(hubspot_company_id) WHERE hubspot_company_id IS NOT NULL;
+CREATE INDEX idx_reports_hubspot_contact_id ON reports(hubspot_contact_id) WHERE hubspot_contact_id IS NOT NULL;
+CREATE UNIQUE INDEX reports_slug_unique ON reports(slug);
+```
 
 ### Testing Requirements
 
@@ -136,6 +235,15 @@ vercel env ls
 - **ENABLE** "Include source files outside Root Directory" in Vercel project settings (enabled by default)
 - **COPY** shared dependencies into project directory to avoid monorepo import issues
 - **USE** simple file copying instead of complex bundling for reliable builds
+
+#### React/Vite Styling Best Practices
+
+- **PRESERVE** original Replit styling and design patterns (Tailwind CSS + Montserrat fonts)
+- **MAINTAIN** consistent light theme: `bg-gray-50` backgrounds, `bg-white` cards, `text-gray-900` headings
+- **AVOID** dark mode by default - use light theme matching report templates
+- **USE** HubSpot brand colors sparingly: `--hubspot-orange: hsl(14, 100%, 50%)`
+- **ENSURE** good contrast: dark text on light backgrounds for readability
+- **TEST** styling across all pages: homepage, API docs, and report templates should have consistent theme
 
 #### Build Strategy for Self-Contained Deployment
 
@@ -218,6 +326,9 @@ vercel domains add your-domain.com    # Add custom domain
 
 # Upload HubSpot extension
 cd packages/hubspot-extension && hs project upload
+
+# Test Production API (Database-Integrated)
+curl https://sales-intel-backend-77eralx0z-man-digital.vercel.app/api/reports/by-hubspot-id?contactId=387571234
 ```
 
 ### HubSpot Specific Guidelines

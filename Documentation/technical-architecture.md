@@ -7,20 +7,24 @@
 ```
 ┌─────────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
 │   HubSpot CRM       │     │   Vercel Backend    │     │   Neon Database     │
-│                     │     │                     │     │                     │
+│                     │     │   (Production)      │     │   (PostgreSQL 17)   │
 │ ┌─────────────────┐ │     │ ┌─────────────────┐ │     │ ┌─────────────────┐ │
-│ │ UI Extension    │ │────▶│ │ OAuth Handler   │ │────▶│ │ PostgreSQL 17   │ │
-│ │ (React)         │ │     │ └─────────────────┘ │     │ └─────────────────┘ │
-│ └─────────────────┘ │     │                     │     │                     │
-│                     │     │ ┌─────────────────┐ │     │ ┌─────────────────┐ │
-│ ┌─────────────────┐ │     │ │ Sales Intel API │ │────▶│ │ JSONB Reports   │ │
-│ │ Context Data    │ │     │ └─────────────────┘ │     │ └─────────────────┘ │
-│ └─────────────────┘ │     │                     │     │                     │
-│                     │     │ ┌─────────────────┐ │     │ ┌─────────────────┐ │
-│ ┌─────────────────┐ │     │ │ AI Processing   │ │     │ │ Drizzle ORM     │ │
-│ │ hubspot.fetch() │ │────▶│ └─────────────────┘ │     │ └─────────────────┘ │
-│ └─────────────────┘ │     └─────────────────────┘     └─────────────────────┘
-└─────────────────────┘
+│ │ UI Extension    │ │────▶│ │ OAuth Handler   │ │────▶│ │ Reports Table   │ │
+│ │ (React)         │ │     │ └─────────────────┘ │     │ │ JSONB + Indexes │ │
+│ └─────────────────┘ │     │                     │     │ └─────────────────┘ │
+│                     │     │ ┌─────────────────┐ │     │                     │
+│ ┌─────────────────┐ │     │ │ HubSpot ID API  │ │────▶│ ┌─────────────────┐ │
+│ │ Context Data    │ │     │ │ /by-hubspot-id  │ │     │ │ Indexed Queries │ │
+│ │ (Contact/Comp)  │ │     │ └─────────────────┘ │     │ │ company_id      │ │
+│ └─────────────────┘ │     │                     │     │ │ contact_id      │ │
+│                     │     │ ┌─────────────────┐ │     │ │ slug            │ │
+│ ┌─────────────────┐ │     │ │ Report Display  │ │────▶│ └─────────────────┘ │
+│ │ hubspot.fetch() │ │────▶│ │ React + Vite    │ │     │                     │
+│ └─────────────────┘ │     │ │ Tailwind CSS    │ │     │ ┌─────────────────┐ │
+└─────────────────────┘     │ └─────────────────┘ │     │ │ JSONB Payload   │ │
+                            └─────────────────────┘     │ │ Flexible Schema │ │
+                                                        │ └─────────────────┘ │
+                                                        └─────────────────────┘
 ```
 
 ### Component Architecture
@@ -44,20 +48,23 @@
 
 ```typescript
 // API Structure
-├── server/
-│   ├── index.ts               // Express server entry
-│   ├── routes.ts              // API route definitions
-│   ├── db.ts                  // Neon database connection
-│   └── services/
-│       ├── openai.ts          // AI processing service
-│       └── schema-registry.ts // Report schema management
-├── client/                    // React frontend
+├── api/
+│   ├── report/[slug].ts      // Individual report retrieval
+│   ├── reports/
+│   │   ├── by-hubspot-id.ts  // Query by HubSpot contact/company ID
+│   │   └── create.ts         // Create new reports with JSONB
+│   └── schemas/
+│       └── [key].ts          // Schema registry endpoints
+├── client/                   // React frontend (Vite build)
 │   ├── src/
-│   │   ├── components/        // Report display components
-│   │   ├── pages/            // Report pages
-│   │   └── lib/              // Utilities and types
-└── shared/
-    └── schema.ts              // Database schema definitions
+│   │   ├── components/       // Report display components
+│   │   ├── pages/           // Report pages and API docs
+│   │   └── lib/             // Database types and utilities
+├── server/
+│   ├── db.ts                // Neon PostgreSQL connection
+│   └── services/
+│       └── openai.ts        // AI processing service
+└── vercel.json              // Deployment configuration
 ```
 
 #### 3. Integration Flow
@@ -105,30 +112,65 @@ sequenceDiagram
 
 ### Data Models
 
-#### OAuth Token Model
+#### Database Schema (Neon PostgreSQL)
 
-```typescript
-interface OAuthToken {
-  hubspotAccountId: string;
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: Date;
-  scopes: string[];
-  createdAt: Date;
-  updatedAt: Date;
-}
+```sql
+CREATE TABLE reports (
+  id SERIAL PRIMARY KEY,
+  slug VARCHAR(255) UNIQUE NOT NULL,
+  schema_key VARCHAR(100) NOT NULL,
+  hubspot_record_id VARCHAR(100),
+  hubspot_company_id VARCHAR(100),
+  hubspot_contact_id VARCHAR(100),
+  original_payload JSONB,
+  payload JSONB NOT NULL,
+  processed_payload JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Optimized indexes for HubSpot queries
+CREATE INDEX idx_reports_hubspot_company_id ON reports(hubspot_company_id)
+  WHERE hubspot_company_id IS NOT NULL;
+CREATE INDEX idx_reports_hubspot_contact_id ON reports(hubspot_contact_id)
+  WHERE hubspot_contact_id IS NOT NULL;
+CREATE UNIQUE INDEX reports_slug_unique ON reports(slug);
 ```
 
-#### Report Configuration
+#### JSONB Report Structure
 
 ```typescript
-interface ReportConfig {
-  id: string;
-  name: string;
-  description: string;
-  endpoint: string;
-  requiredContext: ('contactId' | 'companyId')[];
-  permissions: string[];
+interface ReportPayload {
+  basic_information: {
+    first_name: string;
+    last_name: string;
+    company_name: string;
+    title: string;
+    email: string;
+    phone?: string;
+    linkedin_url: string;
+    company_summary: string;
+    profile_pic_url: string;
+    company_logo_url: string;
+    use_case: string;
+    key_technologies: string[];
+  };
+  company_context: object;
+  b2b_persona_messaging: object;
+  outreach_context: object;
+  segmentation_strategy: object;
+  outreach_executed: object;
+  next_steps: object;
+  team_expansion: object;
+  outreach_messages_sent: object;
+  sequence_start_date: string;
+  sequence_start_timestamp: string;
+  hubspot_contact_id?: string;
+  hubspot_company_id?: string;
+  tokensUsed: number;
+  inputTokens: number;
+  outputTokens: number;
+  totalCostToAIProvider: string;
 }
 ```
 
@@ -158,24 +200,51 @@ Response: {
 }
 ```
 
-##### Generate Report URL Endpoint
+##### Query Reports by HubSpot ID
 
 ```typescript
-// POST /api/reports/generate-url
+// GET /api/reports/by-hubspot-id
 Request: {
-  headers: {
-    authorization: 'Bearer {hubspot_access_token}'
-  },
-  body: {
-    reportId: string;
+  query: {
     contactId?: string;
     companyId?: string;
   }
 }
 
 Response: {
-  url: string;
-  expiresAt: string;
+  success: boolean;
+  data: Array<{
+    id: number;
+    slug: string;
+    schema_key: string;
+    hubspot_company_id: string;
+    hubspot_contact_id: string;
+    basic_info: object;
+    created_at: string;
+  }>;
+}
+```
+
+##### Create Report Endpoint
+
+```typescript
+// POST /api/reports/create
+Request: {
+  body: {
+    reportData: any; // Flexible JSONB structure
+  }
+}
+
+Response: {
+  success: boolean;
+  data: {
+    id: number;
+    url: string;
+    slug: string;
+    hubspot_company_id?: string;
+    hubspot_contact_id?: string;
+    created_at: string;
+  }
 }
 ```
 
@@ -195,7 +264,7 @@ const corsOptions = {
   origin: [
     'https://app.hubspot.com',
     'https://app-eu1.hubspot.com',
-    process.env.REPLIT_APP_URL,
+    process.env.VERCEL_URL,
   ],
   credentials: true,
   methods: ['GET', 'POST'],
@@ -223,9 +292,10 @@ const cspHeaders = {
 
 #### Database Optimization
 
-- Connection pooling for Replit database
-- Indexed queries on HubSpot IDs
-- Lazy loading of report data
+- Neon PostgreSQL serverless connection pooling
+- Conditional indexes on hubspot_company_id and hubspot_contact_id
+- JSONB storage with indexed columns for fast queries
+- Optimized for HubSpot UI extension query patterns
 
 ### Error Handling
 
@@ -277,20 +347,29 @@ interface ErrorResponse {
 
 ```json
 {
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/public",
   "functions": {
-    "api/auth/*.ts": {
-      "maxDuration": 10
-    },
-    "api/reports/*.ts": {
+    "api/**/*.ts": {
       "maxDuration": 30
     }
   },
-  "env": {
-    "HUBSPOT_CLIENT_ID": "@hubspot-client-id",
-    "HUBSPOT_CLIENT_SECRET": "@hubspot-client-secret",
-    "ENCRYPTION_KEY": "@encryption-key",
-    "REPLIT_API_URL": "@replit-api-url"
-  }
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
 ```
 
