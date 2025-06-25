@@ -93,7 +93,7 @@ const reportData = {
   },
 };
 
-const createResponse = await fetch('/api/reports/create', {
+const createResponse = await fetch('/api/report', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(reportData),
@@ -111,13 +111,13 @@ const createResponse = await fetch('/api/reports/create', {
 
 #### Production API Endpoints (Database-Integrated)
 
-**Latest Deployment:** `https://sales-intel-backend-77eralx0z-man-digital.vercel.app`
+**Latest Deployment:** `https://sales-intel-backend-os8u4ga9i-man-digital.vercel.app`
 
 **Key Endpoints:**
 
 - `GET /api/report/{slug}` - Get single report by slug (database lookup)
 - `GET /api/reports/by-hubspot-id?contactId=X&companyId=Y` - Query reports by HubSpot IDs (indexed)
-- `POST /api/reports/create` - Create new report with JSONB structure
+- `POST /api/report` - Create new report with JSONB structure (consolidated endpoint)
 - `GET /r/{slug}` - View HTML report (React + Tailwind CSS)
 
 **Database Integration:**
