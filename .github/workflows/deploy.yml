@@ -69,7 +69,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./packages/vercel-backend
+          working-directory: ./packages/sales-intel-backend
           vercel-args: ${{ github.ref == 'refs/heads/main' && '--prod' || '' }}
 
   deploy-hubspot:
@@ -92,14 +92,14 @@ jobs:
 
       - name: Authenticate with HubSpot
         run: |
-          cd packages/hubspot-extension
+          cd packages/hubspot-public-app
           echo "Creating HubSpot config..."
           mkdir -p ~/.config/@hubspot/cli
           echo "{\"name\":\"prod\",\"authType\":\"personalaccesskey\",\"auth\":{\"tokenInfo\":{\"accessToken\":\"${{ secrets.HUBSPOT_ACCESS_TOKEN }}\"}},\"portalId\":${{ secrets.HUBSPOT_PORTAL_ID }}}" > ~/.config/@hubspot/cli/config.yaml
 
       - name: Upload HubSpot Extension
         run: |
-          cd packages/hubspot-extension
+          cd packages/hubspot-public-app
           hs project upload --account=${{ secrets.HUBSPOT_PORTAL_ID }}
 
   security-scan:
