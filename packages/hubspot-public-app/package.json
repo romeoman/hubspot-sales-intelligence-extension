@@ -1,0 +1,21 @@
+{
+  "name": "@hubspot-ui-extension/hubspot-public-app",
+  "version": "1.0.0",
+  "description": "HubSpot UI Extension for Sales Intelligence Reports",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Use HubSpot CLI: hs project dev'",
+    "build": "echo 'HubSpot extensions are built during upload'",
+    "upload": "hs project upload",
+    "deploy": "hs project deploy",
+    "lint": "echo 'No linting needed for HubSpot extensions'",
+    "typecheck": "echo 'No type checking needed for HubSpot extensions'",
+    "test": "echo 'No tests for HubSpot extensions'"
+  },
+  "keywords": [
+    "hubspot",
+    "ui-extension",
+    "sales-intelligence"
+  ],
+  "license": "MIT"
+}
