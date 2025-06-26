@@ -1,0 +1,10 @@
+{
+  "defaultAccount": "man-digital-development",
+  "accounts": [
+    {
+      "name": "man-digital-development",
+      "portalId": 146425426,
+      "authType": "personalaccesskey"
+    }
+  ]
+}

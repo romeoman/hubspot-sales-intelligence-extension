@@ -2,9 +2,9 @@
   "name": "Sales Intelligence Reports",
   "uid": "sales-intelligence-reports",
   "description": "AI-powered sales intelligence reports with iframe modal display for contacts and companies.",
-  "allowedUrls": ["https://your-vercel-backend.vercel.app", "https://your-sales-intel.vercel.app"],
+  "allowedUrls": ["https://sales-intel.mandigital.dev"],
   "auth": {
-    "redirectUrls": ["https://your-vercel-backend.vercel.app/api/auth/callback"],
+    "redirectUrls": ["https://sales-intel.mandigital.dev/api/auth/callback"],
     "requiredScopes": ["crm.objects.contacts.read", "crm.objects.companies.read"],
     "optionalScopes": [],
     "conditionallyRequiredScopes": []

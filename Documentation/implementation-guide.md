@@ -550,7 +550,7 @@ vercel env add VARIABLE_NAME
 # HubSpot OAuth (Required for Public App)
 HUBSPOT_CLIENT_ID=your_client_id_from_hubspot_app
 HUBSPOT_CLIENT_SECRET=your_client_secret_from_hubspot_app
-HUBSPOT_REDIRECT_URI=https://your-vercel-domain.vercel.app/auth/hubspot/callback
+HUBSPOT_REDIRECT_URI=https://sales-intel.mandigital.dev/auth/hubspot/callback
 HUBSPOT_SCOPES=crm.objects.contacts.read,crm.objects.companies.read
 
 # Database (Neon PostgreSQL)

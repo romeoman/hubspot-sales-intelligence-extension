@@ -51,8 +51,7 @@
 ├── api/
 │   ├── report/[slug].ts      // Individual report retrieval
 │   ├── reports/
-│   │   ├── by-hubspot-id.ts  // Query by HubSpot contact/company ID
-│   │   └── create.ts         // Create new reports with JSONB
+│   │   └── by-hubspot-id.ts  // Query by HubSpot contact/company ID
 │   └── schemas/
 │       └── [key].ts          // Schema registry endpoints
 ├── client/                   // React frontend (Vite build)
@@ -228,9 +227,12 @@ Response: {
 ##### Create Report Endpoint
 
 ```typescript
-// POST /api/reports/create
+// POST /api/report
 Request: {
   body: {
+    schemaKey: "sales-intel-v1"; // Required
+    hubspotContactId?: string;
+    hubspotCompanyId?: string;
     reportData: any; // Flexible JSONB structure
   }
 }
@@ -244,6 +246,7 @@ Response: {
     hubspot_company_id?: string;
     hubspot_contact_id?: string;
     created_at: string;
+    processing_time_ms: number;
   }
 }
 ```

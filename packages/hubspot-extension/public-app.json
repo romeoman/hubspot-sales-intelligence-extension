@@ -1,0 +1,25 @@
+{
+  "public": true,
+  "name": "Sales Intelligence Reports",
+  "description": "Transform sales intelligence data into comprehensive reports for better sales insights",
+  "logoUrl": "",
+  "websiteUrl": "https://mandigital.dev",
+  "privacyPolicyUrl": "https://mandigital.dev/privacy",
+  "termsOfServiceUrl": "https://mandigital.dev/terms",
+  "supportEmail": "support@mandigital.dev",
+  "scopes": [
+    "crm.objects.contacts.read",
+    "crm.objects.companies.read"
+  ],
+  "redirectUris": [
+    "https://sales-intel.mandigital.dev/api/auth/callback"
+  ],
+  "allowedUrls": [
+    "https://sales-intel.mandigital.dev"
+  ],
+  "features": {
+    "uiExtensions": {
+      "enabled": true
+    }
+  }
+}

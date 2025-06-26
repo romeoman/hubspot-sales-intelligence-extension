@@ -111,7 +111,7 @@ const createResponse = await fetch('/api/report', {
 
 #### Production API Endpoints (Database-Integrated)
 
-**Production Domain:** `https://mandigital.dev`
+**Production Domain:** `https://sales-intel.mandigital.dev`
 
 **Key Endpoints:**
 

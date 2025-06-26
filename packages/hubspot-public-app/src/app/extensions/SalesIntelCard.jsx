@@ -43,9 +43,24 @@ const SalesIntelCard = ({ context, fetchData, openIframeModal }) => {
         throw new Error("No object ID found in context");
       }
 
-      // Fetch available reports from your backend
-      const response = await fetch(
-        `https://your-vercel-backend.vercel.app/api/reports/available?${objectType}Id=${objectId}&portalId=${context.portal.id}`
+      // Build query parameters based on object type
+      let queryParams = "";
+      if (objectType === "contact") {
+        queryParams = `contactId=${objectId}`;
+        
+        // If viewing a contact, also check for associated company
+        const associations = context.crm?.associations;
+        if (associations?.company && associations.company.length > 0) {
+          const companyId = associations.company[0].id;
+          queryParams += `&companyId=${companyId}`;
+        }
+      } else {
+        queryParams = `companyId=${objectId}`;
+      }
+
+      // Fetch available reports from your backend using hubspot.fetch
+      const response = await hubspot.fetch(
+        `https://sales-intel.mandigital.dev/api/reports/by-hubspot-id?${queryParams}`
       );
 
       if (!response.ok) {
@@ -55,7 +70,15 @@ const SalesIntelCard = ({ context, fetchData, openIframeModal }) => {
       const data = await response.json();
       
       if (data.success && data.data?.reports) {
-        setReports(data.data.reports.filter(r => r.hasData));
+        // Map the reports to include the full report URL
+        const mappedReports = data.data.reports.map(report => ({
+          ...report,
+          reportUrl: `https://sales-intel.mandigital.dev${report.reportUrl}`,
+          hasData: true,
+          reportType: report.schemaKey === 'sales-intel-v1' ? 'Sales Intelligence' : 'Report',
+          description: `${report.basicInfo.firstName} ${report.basicInfo.lastName} - ${report.basicInfo.companyName}`
+        }));
+        setReports(mappedReports);
       } else {
         setReports([]);
       }
@@ -68,7 +91,7 @@ const SalesIntelCard = ({ context, fetchData, openIframeModal }) => {
     }
   };
 
-  const handleViewReport = async () => {
+  const handleViewReport = () => {
     if (!selectedReport) return;
 
     try {
@@ -77,44 +100,16 @@ const SalesIntelCard = ({ context, fetchData, openIframeModal }) => {
         throw new Error("Selected report not found");
       }
 
-      // Generate the report URL
-      let reportUrl;
-      if (report.reportUrl) {
-        reportUrl = report.reportUrl;
-      } else {
-        // Call your backend to generate a signed URL
-        const response = await fetch(
-          "https://your-vercel-backend.vercel.app/api/reports/generate-url",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              slug: report.slug,
-              portalId: context.portal.id,
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to generate report URL");
-        }
-
-        const data = await response.json();
-        reportUrl = data.data?.url;
-      }
-
-      if (!reportUrl) {
+      if (!report.reportUrl) {
         throw new Error("No report URL available");
       }
 
-      // Open the iframe modal
+      // Open the iframe modal with the report URL
       openIframeModal({
-        uri: reportUrl,
-        height: 800,
-        width: 1200,
-        title: `Sales Intelligence Report`,
+        uri: report.reportUrl,
+        height: 900,
+        width: 1400,
+        title: `Sales Intelligence Report - ${report.basicInfo.firstName} ${report.basicInfo.lastName}`,
         flush: true,
       });
     } catch (err) {
@@ -163,7 +158,7 @@ const SalesIntelCard = ({ context, fetchData, openIframeModal }) => {
 
   // Show report selector
   const reportOptions = reports.map((report) => ({
-    label: `${report.reportType || "Sales Intelligence"} Report`,
+    label: report.description || `${report.reportType || "Sales Intelligence"} Report`,
     value: report.slug,
   }));
 
@@ -193,8 +188,7 @@ const SalesIntelCard = ({ context, fetchData, openIframeModal }) => {
             Selected Report
           </Text>
           <Text variant="microcopy">
-            {reports.find(r => r.slug === selectedReport)?.description ||
-              "AI-powered sales intelligence report"}
+            Created: {new Date(reports.find(r => r.slug === selectedReport)?.created_at).toLocaleDateString()}
           </Text>
         </Flex>
       )}

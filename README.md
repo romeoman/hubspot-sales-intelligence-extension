@@ -1,6 +1,17 @@
-# HubSpot Replit Integration
+# HubSpot Sales Intelligence UI Extension
 
-A comprehensive HubSpot UI Extension that seamlessly integrates Replit reports into the HubSpot CRM interface using a secure OAuth bridge.
+> AI-powered sales intelligence reports integrated directly into HubSpot CRM
+
+[![Production Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)](https://sales-intel.mandigital.dev)
+[![HubSpot Extension](https://img.shields.io/badge/HubSpot-UI%20Extension-orange)](https://app.hubspot.com/developers/146425426/project/sales-intelligence-app)
+[![Build](https://img.shields.io/badge/Build-%234-blue)](https://app.hubspot.com/developer-projects/146425426/project/sales-intelligence-app/activity/build/4)
+
+A complete HubSpot UI Extension that seamlessly integrates AI-powered sales intelligence reports directly into the CRM interface. Sales teams can access comprehensive contact and company intelligence without leaving HubSpot.
+
+### 🚀 Live Demo
+- **Production URL**: [https://sales-intel.mandigital.dev](https://sales-intel.mandigital.dev)
+- **HubSpot App ID**: 14905888
+- **Status**: ✅ Fully operational in production
 
 ## 🚀 Features
 
