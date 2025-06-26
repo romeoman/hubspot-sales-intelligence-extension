@@ -9,6 +9,7 @@
 A complete HubSpot UI Extension that seamlessly integrates AI-powered sales intelligence reports directly into the CRM interface. Sales teams can access comprehensive contact and company intelligence without leaving HubSpot.
 
 ### 🚀 Live Demo
+
 - **Production URL**: [https://sales-intel.mandigital.dev](https://sales-intel.mandigital.dev)
 - **HubSpot App ID**: 14905888
 - **Status**: ✅ Fully operational in production
@@ -26,10 +27,11 @@ A complete HubSpot UI Extension that seamlessly integrates AI-powered sales inte
 
 ```
 ├── packages/
-│   ├── hubspot-extension/     # React UI Extension for HubSpot
-│   ├── vercel-backend/        # OAuth bridge API (Next.js)
+│   ├── hubspot-public-app/    # HubSpot UI Extension (React)
+│   ├── sales-intel-backend/   # Consolidated backend (OAuth + Reports)
 │   └── shared/               # Common types and utilities
 ├── Documentation/            # Project documentation
+├── Tasks/                   # Task tracking and status
 └── scripts/                 # Build and deployment scripts
 ```
 
@@ -38,31 +40,30 @@ A complete HubSpot UI Extension that seamlessly integrates AI-powered sales inte
 ### 1. Prerequisites
 
 - Node.js 18+ and npm 9+
-- HubSpot Developer Account with UI Extensions Early Access
+- HubSpot Developer Account (Public App)
 - Vercel Account
-- Replit Account with API access
+- Neon PostgreSQL Database
 
 ### 2. Environment Configuration
 
-#### Vercel Backend (.env.local)
+#### Sales Intel Backend (.env.local)
 
 ```bash
+# Database
+DATABASE_URL=postgresql://user:pass@host/database
+
 # HubSpot OAuth
 HUBSPOT_CLIENT_ID=your_hubspot_client_id
 HUBSPOT_CLIENT_SECRET=your_hubspot_client_secret
-HUBSPOT_REDIRECT_URI=https://your-domain.vercel.app/api/auth/callback
+HUBSPOT_APP_ID=your_hubspot_app_id
+
+# OpenAI
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-4.1-nano-2025-04-14
 
 # Security
 ENCRYPTION_KEY=your_32_character_encryption_key
 JWT_SECRET=your_jwt_secret_for_signing_tokens
-
-# External APIs
-REPLIT_API_URL=https://your-reports.replit.app
-REPLIT_API_KEY=your_replit_api_key
-
-# Vercel KV Storage
-KV_REST_API_URL=https://your-kv-instance.upstash.io
-KV_REST_API_TOKEN=your_kv_token
 ```
 
 ### 3. Installation
@@ -81,26 +82,26 @@ cd packages/shared && npm run build
 ### 4. Development
 
 ```bash
-# Start Vercel backend development server
-cd packages/vercel-backend && npm run dev
+# Start sales intel backend development server
+cd packages/sales-intel-backend && npm run dev
 
-# In another terminal, start HubSpot extension development
-cd packages/hubspot-extension && hs project dev
+# In another terminal, work on HubSpot extension
+cd packages/hubspot-public-app && npm run dev
 ```
 
 ### 5. Deployment
 
-#### Deploy Vercel Backend
+#### Deploy Sales Intel Backend
 
 ```bash
-cd packages/vercel-backend
+cd packages/sales-intel-backend
 vercel --prod
 ```
 
 #### Deploy HubSpot Extension
 
 ```bash
-cd packages/hubspot-extension
+cd packages/hubspot-public-app
 hs project upload
 ```
 
@@ -117,13 +118,13 @@ hs project upload
 ```mermaid
 graph TD
     A[HubSpot CRM] --> B[UI Extension]
-    B --> C[Vercel OAuth Bridge]
+    B --> C[Sales Intel Backend]
     C --> D[HubSpot API]
-    C --> E[Vercel KV Storage]
-    C --> F[Replit Reports]
+    C --> E[Neon PostgreSQL]
+    C --> F[OpenAI API]
 
     B --> G[Report Modal]
-    G --> F
+    G --> C
 ```
 
 ## 🔄 OAuth Flow
@@ -132,7 +133,7 @@ graph TD
 2. Redirect to `/api/auth/install` with portal ID
 3. Redirect to HubSpot OAuth consent screen
 4. User approves, HubSpot redirects to `/api/auth/callback`
-5. Exchange code for tokens, encrypt and store in Vercel KV
+5. Exchange code for tokens and display success page
 6. User can now view reports in UI Extension
 
 ## 🛠️ API Endpoints
@@ -146,8 +147,9 @@ graph TD
 
 ### Reports
 
-- `GET /api/reports/available` - Get available reports
-- `POST /api/reports/generate-url` - Generate signed report URL
+- `GET /api/reports/by-hubspot-id` - Get reports by HubSpot contact/company ID
+- `POST /api/report` - Create new report
+- `GET /r/{slug}` - View report HTML
 
 ### Health
 
@@ -160,7 +162,7 @@ graph TD
 npm test
 
 # Run tests for specific package
-npm test --workspace=packages/vercel-backend
+npm test --workspace=packages/sales-intel-backend
 
 # Run with coverage
 npm run test:coverage
@@ -189,20 +191,20 @@ See [CLAUDE.md](./CLAUDE.md) for comprehensive development guidelines including:
 
 1. **Token Expired**: Check `/api/auth/status` and refresh if needed
 2. **CORS Errors**: Verify Vercel domain in HubSpot app settings
-3. **Report Not Loading**: Check Replit API connectivity
+3. **Report Not Loading**: Check database connectivity
 4. **Missing Reports**: Verify HubSpot object IDs and permissions
 
 ### Debug Commands
 
 ```bash
-# Check token status
-curl -X GET "https://your-domain.vercel.app/api/auth/status?portalId=123"
-
-# Test report availability
-curl -X GET "https://your-domain.vercel.app/api/reports/available?portalId=123&contactId=456"
-
 # Check health
-curl -X GET "https://your-domain.vercel.app/api/health"
+curl -X GET "https://sales-intel.mandigital.dev/api/health"
+
+# Test report fetching
+curl -X GET "https://sales-intel.mandigital.dev/api/reports/by-hubspot-id?contactId=123&companyId=456"
+
+# View report
+curl -X GET "https://sales-intel.mandigital.dev/r/REPORT_SLUG"
 ```
 
 ## 📄 License
@@ -219,4 +221,4 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## 📞 Support
 
-For support, please contact [support@your-company.com](mailto:support@your-company.com) or create an issue in this repository.
+For support, please contact [support@mandigital.dev](mailto:support@mandigital.dev) or create an issue in this repository.
