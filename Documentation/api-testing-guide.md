@@ -16,7 +16,7 @@ This guide provides comprehensive testing instructions for the Sales Intelligenc
 ### Required Environment Variables
 
 ```env
-DATABASE_URL=postgresql://neondb_owner:npg_ZBnhG6EeK7pW@ep-yellow-violet-a81qh1e5-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
+DATABASE_URL=postgresql://username:password@your-neon-host.neon.tech/database_name?sslmode=require
 OPENAI_API_KEY=your_openai_api_key_here
 NODE_ENV=development
 PORT=3000
